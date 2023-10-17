@@ -1,3 +1,8 @@
+using Lessons_2.Bll.Services;
+using Lessons_2.Bll.Services.Interfaces;
+using Lessons_2.Dal.Repositories;
+using Lessons_2.Dal.Repositories.Interfaces;
+
 namespace Lessons_2;
 
 public class Program
@@ -8,6 +13,8 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddScoped<ICalculationService, CalculationService>();
+        builder.Services.AddSingleton<ICalculationHistoryRepository, CalculationHistoryRepository>();
         
         var app = builder.Build();
         if (app.Environment.IsDevelopment())
@@ -15,13 +22,7 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
-        app.UseHttpsRedirection();
-        app.UseAuthorization();
-        app.UseRouting();
-        app.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Calculation}");
+        app.MapControllers();
         app.Run();
     }
 }
